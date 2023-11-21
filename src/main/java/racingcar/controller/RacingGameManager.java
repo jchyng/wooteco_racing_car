@@ -1,63 +1,49 @@
 package racingcar.controller;
 
-import java.util.List;
 import racingcar.View.InputView;
 import racingcar.View.OutputView;
-import racingcar.model.Car;
 import racingcar.model.Cars;
 
 public class RacingGameManager {
-    private Cars cars;
-    private InputView inputView;
-    private OutputView outputView;
-    private int tryCount;
+    private final InputView inputView = new InputView();
+    private final OutputView outputView = new OutputView();
 
-    public RacingGameManager() {
-    }
-
-    public RacingGameManager(Cars cars, InputView inputView, OutputView outputView) {
-        this.cars = cars;
-        this.inputView = inputView;
-        this.outputView = outputView;
-    }
-
-    public void gameStart(){
+    public void gameStart() {
         String names = inputView.enterCarNames();
-        cars.setCarList(names);
+        Cars cars = new Cars(names);
 
         String inputTryCount = inputView.enterTryCount();
-        setTryCount(inputTryCount);
+        int tryCount = getTryCount(inputTryCount);
 
-        repeatRun(tryCount);
-
-        List<Car> winner = cars.getWinner();
-        outputView.printWinner(winner);
+        repeatRun(tryCount, cars);
+        outputView.printWinner(cars.getWinner());
     }
 
-    void repeatRun(int tryCount){
+    void repeatRun(int tryCount, Cars cars) {
         System.out.println("실행 결과");
-        
-        while (tryCount > 0){
+
+        while (tryCount > 0) {
             cars.runCars();
-            outputView.printProgressStatus(cars.getCarList());
+            outputView.printProgressStatus(cars.getCars());
             tryCount--;
         }
     }
 
-    void tryCountValidation(String tryCount){
-        if(!isNumeric(tryCount)){
+    void tryCountValidation(String tryCount) {
+        if (!isNumeric(tryCount)) {
             throw new IllegalArgumentException();
         }
-        if(Integer.parseInt(tryCount) < 1){
+        if (Integer.parseInt(tryCount) < 1) {
             throw new IllegalArgumentException();
         }
-    }
-    private void setTryCount(String tryCount){
-        tryCountValidation(tryCount);
-        this.tryCount = convertStringToInt(tryCount);
     }
 
-    private int convertStringToInt(String tryCount){
+    private int getTryCount(String tryCount) {
+        tryCountValidation(tryCount);
+        return convertStringToInt(tryCount);
+    }
+
+    private int convertStringToInt(String tryCount) {
         return Integer.parseInt(tryCount);
     }
 
