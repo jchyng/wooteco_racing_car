@@ -7,30 +7,29 @@ import java.util.List;
 import java.util.Optional;
 
 public class Cars {
-    private final int MIN_VALUE = 0;
-    private final int MAX_VALUE = 9;
+    private final List<Car> cars;
 
-    private List<Car> carList = new ArrayList<>();
-
-    public List<Car> getCarList() {
-        return carList;
+    public Cars(String names) {
+        this.cars = createCars(names);
     }
 
-    public void setCarList(List<Car> carList) {
-        this.carList = carList;
+    public Cars(List<Car> cars) {
+        this.cars = cars;
     }
 
-    public void setCarList(String inputString) {
-        String[] names = inputString.split(",");
+    public List<Car> createCars(String inputNames) {
+        String[] names = inputNames.split(",");
+        List<Car> cars = new ArrayList<>();
 
         for (String name : names) {
             Car car = new Car(name.trim());
-            carList.add(car);
+            cars.add(car);
         }
+        return cars;
     }
 
     public void runCars() {
-        for (Car car : carList) {
+        for (Car car : cars) {
             car.run(generateRandomNumber());
         }
     }
@@ -39,17 +38,21 @@ public class Cars {
         List<Car> winner = new ArrayList<>();
         Optional<Integer> maxDistance = getMaxDistance();
 
-        carList.stream().filter(car -> car.getDistance() == maxDistance.orElse(0))
+        cars.stream().filter(car -> car.getDistance() == maxDistance.orElse(0))
                 .forEach(winner::add);
         return winner;
     }
 
+    public List<Car> getCars() {
+        return cars;
+    }
+
     private int generateRandomNumber() {
-        return Randoms.pickNumberInRange(MIN_VALUE, MAX_VALUE);
+        return Randoms.pickNumberInRange(Rule.MIN_NUMBER.value(), Rule.MAX_NUMBER.value());
     }
 
     private Optional<Integer> getMaxDistance() {
-        return carList.stream().map(Car::getDistance)
+        return cars.stream().map(Car::getDistance)
                 .max(Comparator.naturalOrder());
     }
 }

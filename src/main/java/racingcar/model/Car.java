@@ -1,10 +1,6 @@
 package racingcar.model;
 
 public class Car {
-    private final int MIN_LENGTH = 1;
-    private final int MAX_LENGTH = 4;
-    private final int STANDARD_VALUE = 4;
-
     private String name;
     private int distance = 0;
 
@@ -16,34 +12,29 @@ public class Car {
         this.name = name;
     }
 
-    public Car(String name, int distance) {
-        lengthValidation(name);
-        this.name = name;
-        this.distance = distance;
+    public void run(int number) {
+        if (isMove(number)) {
+            this.distance++;
+        }
     }
 
     public String getName() {
         return name;
     }
+
     public int getDistance() {
         return distance;
     }
 
-    public void run(int number){
-        if(isMove(number)){
-            this.distance++;
-        }
-    }
-
-    void lengthValidation(String name) {
+    private void lengthValidation(String name) {
         if (name == null) {
             throw new IllegalArgumentException();
-        } else if (name.length() < MIN_LENGTH || name.length() > MAX_LENGTH) {
+        } else if (name.length() < Rule.MIN_LENGTH.value() || name.length() > Rule.MAX_LENGTH.value()) {
             throw new IllegalArgumentException();
         }
     }
 
-    private boolean isMove (int number){
-        return number >= STANDARD_VALUE;
+    private boolean isMove(int number) {
+        return number >= Rule.THRESHOLD.value();
     }
 }

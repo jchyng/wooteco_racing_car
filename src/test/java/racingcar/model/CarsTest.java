@@ -7,38 +7,32 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class CarsTest {
-    private Cars cars = new Cars();
 
     @DisplayName("자동차 이름을 콤마로 구분하여 저장")
     @Test
     void saveCarNameByComma() {
-        //Given
-        String inputString = "pobi, woni, jun";
-
-        //When
-        cars.setCarList(inputString);
-        List<Car> carList = cars.getCarList();
+        //Given & When
+        Cars cars = new Cars("pobi, woni, jun");
+        List<Car> car = cars.getCars();
 
         //Then
-        assertEquals("pobi", carList.get(0).getName());
-        assertEquals("woni", carList.get(1).getName());
-        assertEquals("jun", carList.get(2).getName());
+        assertEquals("pobi", car.get(0).getName());
+        assertEquals("woni", car.get(1).getName());
+        assertEquals("jun", car.get(2).getName());
     }
 
     @DisplayName("가장 긴 이동거리를 가진 차들이 우승자")
     @Test
     void winnerIsHaveLongestDistance() {
         //Given
-        Car pobi = new Car("pobi", 3);
-        Car woni = new Car("woni", 1);
-        Car jun = new Car("jun", 3);
+        Car pobi = new Car("pobi");
+        Car woni = new Car("woni");
+        woni.run(4);
 
-        List<Car> carList = List.of(pobi, woni, jun);
-        List<Car> winner = List.of(pobi, jun);
-
-        cars.setCarList(carList);
+        Cars cars = new Cars(List.of(pobi, woni));
+        List<Car> winner = cars.getWinner();
 
         //When & Then
-        assertEquals(winner, cars.getWinner());
+        assertEquals(winner.get(0).getName(), "woni");
     }
 }
